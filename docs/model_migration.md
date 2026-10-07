@@ -1,3 +1,8 @@
+> **退役说明（2026-10-07）**：文中 `migrate_embeddings.py` 脚本随旧一体化后端一并移除
+> （其依赖的 `backend/` 目录已不存在）。模型升级到 jina-embeddings-v4 已完成；
+> 若将来再需维度迁移，按当前架构重写脚本即可（向量库在推理层，见本仓 README 与套件设计仓
+> `Smartlmager-product-design/01_PRD/架构与拆分设计.md`）。
+
 # 向量模型迁移与重建最新指南
 
 核心目标：离线、安全、可断点续传地用新嵌入模型重建三类向量（title/description/image），原子替换旧表与缓存，并在成功后自动更新主配置中的 `MODEL_PATH` / `EMBEDDING_DIMENSION`。
