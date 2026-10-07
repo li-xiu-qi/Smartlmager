@@ -9,7 +9,7 @@ import crypto from 'crypto'
 export const config = { api: { bodyParser: false } }
 
 const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(process.cwd(), 'data', 'uploads')
-const INFERENCE_URL = process.env.INFERENCE_SERVICE_URL || 'http://192.168.1.170:8100'
+import { getInferenceUrl } from '@/lib/settings'
 
 export async function POST(req: NextRequest) {
   try {
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
       // 调 AI 分析（受 auto_analyze 开关控制）
       let title = file.originalFilename || file.filename, description = '', tags: string[] = []
       if (autoAnalyze) try {
-        const analysisRes = await fetch(`${INFERENCE_URL}/analyze`, {
+        const analysisRes = await fetch(`${getInferenceUrl()}/analyze`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ image_base64: `data:${file.mimetype || 'image/jpeg'};base64,${buffer.toString("base64")}` }),

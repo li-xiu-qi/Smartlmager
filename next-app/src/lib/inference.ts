@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-const INFERENCE_URL = process.env.INFERENCE_SERVICE_URL || 'http://192.168.1.170:8100'
+import { getInferenceUrl } from './settings'
 
 // 按扩展名推导真实 MIME。远端解码器（PIL）虽能嗅探格式，
 // 但声明与实际内容一致是正确做法，也便于将来接严格校验的服务。
@@ -22,7 +22,7 @@ function toDataUrl(filePath: string): string {
 
 export async function encodeText(inputs: string[]): Promise<number[][] | null> {
   try {
-    const r = await fetch(`${INFERENCE_URL}/encode`, {
+    const r = await fetch(`${getInferenceUrl()}/encode`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ input_type: 'text', inputs }),
@@ -38,7 +38,7 @@ export async function encodeText(inputs: string[]): Promise<number[][] | null> {
 export async function encodeImage(imagePaths: string[]): Promise<number[][] | null> {
   try {
     const images = imagePaths.map(toDataUrl)
-    const r = await fetch(`${INFERENCE_URL}/encode`, {
+    const r = await fetch(`${getInferenceUrl()}/encode`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ input_type: 'image', image_paths: images }),
@@ -52,7 +52,7 @@ export async function encodeImage(imagePaths: string[]): Promise<number[][] | nu
 
 export async function vectorAdd(imageId: number, vectorType: string, vector: number[]): Promise<boolean> {
   try {
-    const r = await fetch(`${INFERENCE_URL}/vectors/add`, {
+    const r = await fetch(`${getInferenceUrl()}/vectors/add`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ image_id: imageId, vector_type: vectorType, vector }),
@@ -64,7 +64,7 @@ export async function vectorAdd(imageId: number, vectorType: string, vector: num
 
 export async function vectorSearch(queryVector: number[], vectorType: string, limit = 20): Promise<Array<{image_id: number, score: number}>> {
   try {
-    const r = await fetch(`${INFERENCE_URL}/vectors/search`, {
+    const r = await fetch(`${getInferenceUrl()}/vectors/search`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query_vector: queryVector, vector_type: vectorType, limit }),
@@ -78,7 +78,7 @@ export async function vectorSearch(queryVector: number[], vectorType: string, li
 
 export async function vectorDelete(imageId: number): Promise<boolean> {
   try {
-    const r = await fetch(`${INFERENCE_URL}/vectors/${imageId}`, {
+    const r = await fetch(`${getInferenceUrl()}/vectors/${imageId}`, {
       method: 'DELETE',
       signal: AbortSignal.timeout(10000),
     })
@@ -97,7 +97,7 @@ export async function inferenceHealth(): Promise<boolean> {
   const now = Date.now()
   if (healthCache && now - healthCache.at < HEALTH_TTL_MS) return healthCache.ok
   try {
-    const r = await fetch(`${INFERENCE_URL}/health`, { signal: AbortSignal.timeout(HEALTH_TIMEOUT_MS) })
+    const r = await fetch(`${getInferenceUrl()}/health`, { signal: AbortSignal.timeout(HEALTH_TIMEOUT_MS) })
     let ok = false
     if (r.ok) {
       const d = await r.json().catch(() => null)

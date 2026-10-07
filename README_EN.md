@@ -74,11 +74,11 @@ Main APIs:
 | Chat Recommendation (single) | POST | `/api/v1/ai/recommend/chat` |
 | Chat Recommendation (SSE stream) | POST | `/api/v1/ai/recommend/chat/stream` |
 
-Request Example (streaming; the Next.js full-stack defaults to `:3000`):
+Request Example (streaming; the Next.js full-stack defaults to `:9187`):
 
 ```bash
-# Replace 3000 with the actual port printed on startup
-curl -N -X POST http://localhost:3000/api/v1/ai/recommend/chat/stream \
+# Replace 9187 with the actual port printed on startup
+curl -N -X POST http://localhost:9187/api/v1/ai/recommend/chat/stream \
   -H "Content-Type: application/json" \
   -d '{
     "conversation_id": "demo-session-1",
@@ -203,11 +203,12 @@ cd next-app
 # 2. Install dependencies (note: when NODE_ENV is production on this machine, it must be explicitly overridden, otherwise devDependencies are not installed)
 NODE_ENV=development npm install
 
-# 3. Start the dev server (--webpack is required; Turbopack hangs indefinitely while waiting for request compilation)
-NODE_ENV=development npx next dev --port 3000 --webpack
+# 3. Start the dev server (npm run dev: the script embeds the NODE_ENV override, port 9187,
+#    and --webpack, since Turbopack hangs indefinitely while waiting for request compilation)
+npm run dev
 ```
 
-Then visit <http://localhost:3000>.
+Then visit <http://localhost:9187>.
 
 > The inference service must be started separately (see Option 2). Otherwise AI features such as upload analysis and vector search are unavailable, and pages will show a degraded state.
 
@@ -234,13 +235,13 @@ The inference service exposes the following endpoints (on `:8100`):
 
 ### Startup Checklist
 
-- Next.js full-stack: `curl http://localhost:3000` should return the home page HTML
+- Next.js full-stack: `curl http://localhost:9187` should return the home page HTML
 - Inference service: `curl http://<inference-host>:8100/health` should return `{"status":"ok","model_loaded":true,...}`
 - End to end: upload an image; auto-generated title/description/tags mean the full pipeline works
 
 ### Ports and Proxy Configuration (Important)
 
-- **Next.js full-stack**: default `:3000`, set via `npx next dev --port`
+- **Next.js full-stack**: default `:9187`, set via `npx next dev --port`
 - **Inference service**: default `:8100`, set via the inference-side env var `INFERENCE_PORT`
 - **Next.js to inference service**: defaults to `http://<remote-host>:8100`; see `next-app/src/lib/inference.ts` and `next-app/.env` for the actual target
 - **Vector DB and model paths**: configured in the inference-side `.env` (`VECTOR_DB_PATH`, `VECTOR_DB_DRIVER`, `MODEL_PATH`, etc.), decoupled from Next.js
@@ -257,7 +258,7 @@ The inference service exposes the following endpoints (on `:8100`):
 
 Two independent components communicating over HTTP:
 
-- **Next.js full-stack (local :3000)**: frontend + business API + local SQLite
+- **Next.js full-stack (local :9187)**: frontend + business API + local SQLite
 - **Python inference service (remote :8100)**: vector encoding + vector search + image analysis
 
 ### Next.js Full-Stack (`next-app/`)
@@ -341,7 +342,7 @@ SmartImager/
 
 ### Service Ports
 
-- **Next.js full-stack**: `3000` (default), set via `npx next dev --port`
+- **Next.js full-stack**: `9187` (default), set via `npx next dev --port`
 - **Python inference service**: `8100` (default), set via the env var `INFERENCE_PORT`
 
 ### Key Configuration
@@ -369,7 +370,7 @@ SmartImager/
 
 #### Service Access
 
-- **Main frontend UI**: <http://localhost:3000>
+- **Main frontend UI**: <http://localhost:9187>
 - **Inference service health check**: <http://localhost:8100/health>
 
 ## 📊 System Monitoring & Management

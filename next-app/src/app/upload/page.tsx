@@ -480,6 +480,12 @@ export default function UploadPage() {
                   <p className="text-xs text-muted-foreground">
                     服务端按批次串行写入图片，批次之间并行。批量上传时调大可缩短总耗时
                   </p>
+                  {autoAnalyze && (
+                    <p className="text-xs text-amber-600 dark:text-amber-500">
+                      已开启 AI 分析：模型侧有请求频率限制，批量图片较多时建议不超过 5 张/批，
+                      否则可能触发限流导致部分图片分析失败（标题保留原文件名）
+                    </p>
+                  )}
                 </div>
               </div>
               <Select value={String(concurrency)} onValueChange={(v) => setConcurrency(Number(v))} disabled={disabled}>

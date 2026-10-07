@@ -4,7 +4,7 @@
 - 项目根：`C:/Users/ke/Documents/projects/CodeProjects/Windows-Native/Smartlmager-suite/Smartlmager/next-app`
 - 旧前端（只读参考，禁止修改）：`../frontend/src/`
 - Node 依赖安装必须 `NODE_ENV=development npm install <pkg>`
-- dev server：`NODE_ENV=development npx next dev --port 3000 --webpack`（必须 --webpack）
+- dev server：`NODE_ENV=development npx next dev --port 9187 --webpack`（必须 --webpack）
 
 ## 已就位的地基（直接 import，不要重建）
 - `@/lib/utils` → cn()
@@ -35,7 +35,7 @@
 11. 中文注释，中文 UI 文案
 
 ## 验证方式
-- 改完跑 `curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/<route>` 必须是 200
+- 改完跑 `curl -s -o /dev/null -w "%{http_code}" http://localhost:9187/<route>` 必须是 200
 - 检查浏览器无 console error（看 dev server 输出）
 
 ## 已知坑

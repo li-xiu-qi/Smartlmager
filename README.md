@@ -74,10 +74,10 @@ SmartImager 按**一体化部署**设计：业务层与 AI 计算默认跑在同
 | 对话式推荐（一次性） | POST | `/api/v1/ai/recommend/chat` |
 | 对话式推荐（SSE流） | POST | `/api/v1/ai/recommend/chat/stream` |
 
-请求示例（流式推荐，端口以启动日志为准；Next.js 全栈默认 :3000）：
+请求示例（流式推荐，端口以启动日志为准；Next.js 全栈默认 :9187）：
 
 ```bash
-curl -N -X POST http://localhost:3000/api/v1/ai/recommend/chat/stream \
+curl -N -X POST http://localhost:9187/api/v1/ai/recommend/chat/stream \
   -H "Content-Type: application/json" \
   -d '{
     "conversation_id": "demo-session-1",
@@ -214,11 +214,12 @@ cd next-app
 # 2. 安装依赖（注意：本机 NODE_ENV 为 production 时必须显式覆盖，否则 devDependencies 不安装）
 NODE_ENV=development npm install
 
-# 3. 启动开发服务器（--webpack 必须带，Turbopack 在请求编译阶段会无限等待）
-NODE_ENV=development npx next dev --port 3000 --webpack
+# 3. 启动开发服务器（npm run dev：脚本内置 NODE_ENV 覆盖、端口 9187 与 --webpack，
+#    Turbopack 在请求编译阶段会无限等待，故固定用 webpack）
+npm run dev
 ```
 
-启动后访问 <http://localhost:3000>。
+启动后访问 <http://localhost:9187>。
 
 > 推理服务需另行启动（见方式二），否则上传分析、向量搜索等 AI 功能不可用，页面会给出降级提示。
 
@@ -245,13 +246,13 @@ NODE_ENV=development npx next dev --port 3000 --webpack
 
 ### 启动检查清单
 
-- Next.js 全栈：`curl http://localhost:3000` 应返回首页 HTML
+- Next.js 全栈：`curl http://localhost:9187` 应返回首页 HTML
 - 推理服务：`curl http://<推理服务主机>:8100/health` 应返回 `{"status":"ok","model_loaded":true,...}`
 - 端到端：上传一张图，能自动生成标题/描述/标签即表示全链路通畅
 
 ### 端口与代理配置（重要）
 
-- **Next.js 全栈**：默认 `:3000`，通过 `npx next dev --port` 指定
+- **Next.js 全栈**：默认 `:9187`，通过 `npx next dev --port` 指定
 - **推理服务**：默认 `:8100`，通过推理服务侧环境变量 `INFERENCE_PORT` 指定
 - **Next.js 到推理服务**：默认指向 `http://<远程主机>:8100`，具体目标见 `next-app/src/lib/inference.ts` 与 `next-app/.env`
 - **向量数据库与模型路径**：由推理服务侧 `.env`（`VECTOR_DB_PATH`、`VECTOR_DB_DRIVER`、`MODEL_PATH` 等）配置，与 Next.js 解耦
@@ -270,7 +271,7 @@ NODE_ENV=development npx next dev --port 3000 --webpack
 
 两个独立节点，通过 HTTP 通信：
 
-- **Next.js 全栈（本机 :3000）**：前端 + 业务 API + 本地 SQLite
+- **Next.js 全栈（本机 :9187）**：前端 + 业务 API + 本地 SQLite
 - **Python 推理服务（远程 :8100）**：向量编码 + 向量检索 + 图像分析
 
 ### Next.js 全栈（`next-app/`）
@@ -354,7 +355,7 @@ SmartImager/
 
 ### 服务端口
 
-- **Next.js 全栈**：`3000`（默认），通过 `npx next dev --port` 指定
+- **Next.js 全栈**：`9187`（默认），通过 `npx next dev --port` 指定
 - **Python 推理服务**：`8100`（默认），通过环境变量 `INFERENCE_PORT` 指定
 
 ### 关键配置
@@ -382,7 +383,7 @@ SmartImager/
 
 #### 服务访问地址
 
-- **主前端界面**: <http://localhost:3000>
+- **主前端界面**: <http://localhost:9187>
 - **推理服务健康检查**: <http://localhost:8100/health>
 
 ## 📊 系统监控与管理
