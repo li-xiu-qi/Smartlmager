@@ -209,7 +209,7 @@ SmartImager 支持**一体化部署**：业务层（Next.js 全栈）与 AI 推�
 
 ```bash
 # 1. 进入 Next.js 应用目录
-cd next-app
+cd app
 
 # 2. 安装依赖（注意：本机 NODE_ENV 为 production 时必须显式覆盖，否则 devDependencies 不安装）
 NODE_ENV=development npm install
@@ -254,7 +254,7 @@ npm run dev
 
 - **Next.js 全栈**：默认 `:9187`，通过 `npx next dev --port` 指定
 - **推理服务**：默认 `:8100`，通过推理服务侧环境变量 `INFERENCE_PORT` 指定
-- **Next.js 到推理服务**：默认指向 `http://<远程主机>:8100`，具体目标见 `next-app/src/lib/inference.ts` 与 `next-app/.env`
+- **Next.js 到推理服务**：默认指向 `http://<远程主机>:8100`，具体目标见 `app/src/lib/inference.ts` 与 `app/.env`
 - **向量数据库与模型路径**：由推理服务侧 `.env`（`VECTOR_DB_PATH`、`VECTOR_DB_DRIVER`、`MODEL_PATH` 等）配置，与 Next.js 解耦
 
 
@@ -274,7 +274,7 @@ npm run dev
 - **Next.js 全栈（本机 :9187）**：前端 + 业务 API + 本地 SQLite
 - **Python 推理服务（远程 :8100）**：向量编码 + 向量检索 + 图像分析
 
-### Next.js 全栈（`next-app/`）
+### Next.js 全栈（`app/`）
 
 - **Next.js 16（App Router）** - 前端页面与 Route Handlers 同仓，`/api/v1/*` 即后端接口
 - **React 19 + TypeScript** - 界面与类型
@@ -311,7 +311,7 @@ npm run dev
 
 ```
 SmartImager/
-├── next-app/                     # Next.js 全栈（前端 + 业务 API + 本地 SQLite）
+├── app/                     # Next.js 全栈（前端 + 业务 API + 本地 SQLite）
 │   ├── src/
 │   │   ├── app/                  # 页面与路由
 │   │   │   ├── page.tsx          # 首页
@@ -340,12 +340,12 @@ SmartImager/
 │   ├── 架构图.png / 架构图.dot    #   系统架构图（源文件为 Graphviz DOT，dot 渲染导出）
 │   ├── screenshots/              # 界面截图
 │   └── 推理服务独立-拆分设计.md    #   推理服务拆分方案
-├── main.py                       # 旧一体化后端入口（已归档，保留兼容）
-├── start.py                      # 旧一键启动脚本（已归档，保留兼容）
-├── migrate_embeddings.py         # 离线向量模型迁移脚本（可断点续传）
-├── scripts/                      # 环境与启动辅助脚本
-├── templates/                    # 模板文件
-├── requirements.txt              # Python 依赖（推理服务 / 迁移脚本用）
+├── inference_service/            # AI 推理层（jina-embeddings-v4 编码 / sqlite-vec 向量库 / GLM 视觉分析，:8100）
+├── assets/                       # Logo 等静态资源
+├── docs/                         # 架构图、截图、设计文档
+│   ├── 架构图.png / 架构图.dot    #   系统架构图（源文件为 Graphviz DOT，dot 渲染导出）
+│   ├── screenshots/              # 界面截图
+│   └── 推理服务独立-拆分设计.md    #   推理服务拆分方案
 └── README.md                     # 项目说明
 ```
 
@@ -360,12 +360,12 @@ SmartImager/
 
 ### 关键配置
 
-**Next.js 侧**（`next-app/.env` 或环境变量）：
+**Next.js 侧**（`app/.env` 或环境变量）：
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
 | `INFERENCE_SERVICE_URL` | `http://192.168.1.170:8100` | 推理服务地址 |
-| `DB_PATH` | `next-app/data/smartimager.db` | 本地 SQLite 路径 |
+| `DB_PATH` | `app/data/smartimager.db` | 本地 SQLite 路径 |
 
 **推理服务侧**（`inference_service/.env`，自加载）：
 

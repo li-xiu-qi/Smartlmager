@@ -1,7 +1,7 @@
 # 前端迁移范式（子 agent 必读）
 
 ## 环境
-- 项目根：`C:/Users/ke/Documents/projects/CodeProjects/Windows-Native/Smartlmager-suite/Smartlmager/next-app`
+- 项目根：`C:/Users/ke/Documents/projects/CodeProjects/Windows-Native/Smartlmager-suite/Smartlmager/app`
 - 旧前端（只读参考，禁止修改）：`../frontend/src/`
 - Node 依赖安装必须 `NODE_ENV=development npm install <pkg>`
 - dev server：`NODE_ENV=development npx next dev --port 9187 --webpack`（必须 --webpack）

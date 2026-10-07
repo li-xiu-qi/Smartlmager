@@ -198,7 +198,7 @@ The business layer has fully migrated to Next.js. Frontend pages, REST API and t
 
 ```bash
 # 1. Enter the Next.js app directory
-cd next-app
+cd app
 
 # 2. Install dependencies (note: when NODE_ENV is production on this machine, it must be explicitly overridden, otherwise devDependencies are not installed)
 NODE_ENV=development npm install
@@ -243,7 +243,7 @@ The inference service exposes the following endpoints (on `:8100`):
 
 - **Next.js full-stack**: default `:9187`, set via `npx next dev --port`
 - **Inference service**: default `:8100`, set via the inference-side env var `INFERENCE_PORT`
-- **Next.js to inference service**: defaults to `http://<remote-host>:8100`; see `next-app/src/lib/inference.ts` and `next-app/.env` for the actual target
+- **Next.js to inference service**: defaults to `http://<remote-host>:8100`; see `app/src/lib/inference.ts` and `app/.env` for the actual target
 - **Vector DB and model paths**: configured in the inference-side `.env` (`VECTOR_DB_PATH`, `VECTOR_DB_DRIVER`, `MODEL_PATH`, etc.), decoupled from Next.js
 
 ## Application Scenarios
@@ -261,7 +261,7 @@ Two independent components communicating over HTTP:
 - **Next.js full-stack (local :9187)**: frontend + business API + local SQLite
 - **Python inference service (remote :8100)**: vector encoding + vector search + image analysis
 
-### Next.js Full-Stack (`next-app/`)
+### Next.js Full-Stack (`app/`)
 
 - **Next.js 16 (App Router)** - frontend pages and route handlers in one repo, `/api/v1/*` serves as the backend API
 - **React 19 + TypeScript** - UI and types
@@ -298,7 +298,7 @@ Frontend has 7 pages: home, image library, upload, search, tags, settings, 404.
 
 ```
 SmartImager/
-├── next-app/                     # Next.js full-stack (frontend + business API + local SQLite)
+├── app/                     # Next.js full-stack (frontend + business API + local SQLite)
 │   ├── src/
 │   │   ├── app/                  # Pages and routes
 │   │   │   ├── page.tsx          # Home
@@ -347,12 +347,12 @@ SmartImager/
 
 ### Key Configuration
 
-**Next.js side** (`next-app/.env` or env vars):
+**Next.js side** (`app/.env` or env vars):
 
 | Variable | Default | Description |
 |------|--------|------|
 | `INFERENCE_SERVICE_URL` | `http://192.168.1.170:8100` | Inference service address |
-| `DB_PATH` | `next-app/data/smartimager.db` | Local SQLite path |
+| `DB_PATH` | `app/data/smartimager.db` | Local SQLite path |
 
 **Inference service side** (`inference_service/.env`, self-loaded):
 

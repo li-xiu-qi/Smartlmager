@@ -127,9 +127,9 @@ models/
 **/caches/
 **/__pycache__/
 
-# 例外：next-app 的路由与源码目录恰好叫 cache/ 和 lib/，必须纳入版本控制
-!next-app/src/app/api/v1/system/cache/
-!next-app/src/lib/
+# 例外：app 的路由与源码目录恰好叫 cache/ 和 lib/，必须纳入版本控制
+!app/src/app/api/v1/system/cache/
+!app/src/lib/
 
 # Test databases and temporary files
 backend/tests/*.db
@@ -138,7 +138,7 @@ backend/tests/data/
 
 # User data directories
 # 注意加前导斜杠：lib/、cache/ 这类无分隔符的模式会匹配任意层级，
-# 会把 next-app/src/lib/ 和 next-app/src/app/api/v1/system/cache/ 一起忽略掉。
+# 会把 app/src/lib/ 和 app/src/app/api/v1/system/cache/ 一起忽略掉。
 /data/
 /cache/
 /temp/
@@ -151,12 +151,12 @@ backend/tests/db_func_old
 
 article.md
 # Next.js app
-next-app/node_modules/
-next-app/.next/
-next-app/out/
-next-app/data/
-next-app/*.tsbuildinfo
-next-app/next-env.d.ts
+app/node_modules/
+app/.next/
+app/out/
+app/data/
+app/*.tsbuildinfo
+app/next-env.d.ts
 
 # 依赖备份目录（npm install 前的快照）
 node_modules.bak.*/
@@ -164,4 +164,4 @@ node_modules.bak.*/
 *.bak
 
 # 编译缓存的历史备份目录（诊断时重命名保留，非源码）
-next-app/.next.old-*/
+app/.next.old-*/
